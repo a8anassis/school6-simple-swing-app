@@ -60,7 +60,7 @@ public class TeachersInsertFrame extends JFrame {
 				lastnameText.setText("");
 			}
 		});
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 442, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -79,8 +79,7 @@ public class TeachersInsertFrame extends JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				String inputFirstname;	
-				inputFirstname = firstnameText.getText().trim();
-			
+				inputFirstname = firstnameText.getText().trim();	
 				
 				if (inputFirstname.equals("")) {
 					errorFirstname.setText("Το όνομα είναι υποχρεωτικό");
@@ -191,6 +190,12 @@ public class TeachersInsertFrame extends JFrame {
 		contentPane.add(insertBtn);
 		
 		JButton closeBtn = new JButton("Κλείσιμο");
+		closeBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.getTeachersMenuFrame().setEnabled(true);
+				Main.getTeachersInsertFrame().setVisible(false);
+			}
+		});
 		closeBtn.setIcon(null);
 		closeBtn.setForeground(Color.BLUE);
 		closeBtn.setFont(new Font("Tahoma", Font.BOLD, 12));
