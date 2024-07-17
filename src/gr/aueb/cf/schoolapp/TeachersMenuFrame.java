@@ -55,6 +55,12 @@ public class TeachersMenuFrame extends JFrame {
 		contentPane.add(teachersViewBtn);
 		
 		JButton insertBtn = new JButton("Εισαγωγή Εκπαιδευτή");
+		insertBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.getTeachersInsertFrame().setVisible(true);
+				Main.getTeachersMenuFrame().setEnabled(false);
+			}
+		});
 		insertBtn.setForeground(Color.BLUE);
 		insertBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		insertBtn.setBounds(124, 147, 158, 52);
