@@ -1,6 +1,5 @@
 package gr.aueb.cf.schoolapp;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,7 +12,6 @@ import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.JButton;
-import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -22,6 +20,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.Toolkit;
 
 public class TeachersInsertFrame extends JFrame {
 
@@ -33,26 +32,10 @@ public class TeachersInsertFrame extends JFrame {
 	private JLabel errorFirstname;
 	private JLabel errorLastname;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TeachersInsertFrame frame = new TeachersInsertFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
 	public TeachersInsertFrame() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersInsertFrame.class.getResource("/resources/eduv2.png")));
+		setTitle("Εισαγωγή Εκπαιδευτών");
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
