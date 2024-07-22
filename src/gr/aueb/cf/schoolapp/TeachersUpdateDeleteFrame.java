@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.Toolkit;
 
 public class TeachersUpdateDeleteFrame extends JFrame {
 
@@ -53,6 +54,8 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 
 	
 	public TeachersUpdateDeleteFrame() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersUpdateDeleteFrame.class.getResource("/resources/eduv2.png")));
+		setTitle("Ενημέρωση / Διαγραφή Εκπαιδευτή");
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -69,7 +72,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 				lastnameText.setText("");
 			}
 		});
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 870, 632);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -242,12 +245,42 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		contentPane.add(updateBtn);
 		
 		deleteBtn = new JButton("Διαγραφή");
+		deleteBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String sql = "DELETE FROM teachers WHERE id = ?";
+				
+				try {
+					int inputId = Integer.parseInt(idText.getText().trim());
+					
+					PreparedStatement ps = MainMenuFrame.getConnection().prepareStatement(sql);
+					ps.setInt(1, inputId);
+					
+					int answer = JOptionPane.showConfirmDialog(null, "Είστε σίγουρη/ος", "Διαγραφή", 
+							JOptionPane.YES_NO_OPTION);
+					if (answer == JOptionPane.YES_OPTION) {
+						int rowsAffected = ps.executeUpdate();
+						JOptionPane.showMessageDialog(null, rowsAffected + " γρααμμή/ες διαγράφηκαν", "Διαγραφή", 
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						return;
+					}							
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
 		deleteBtn.setForeground(Color.BLUE);
 		deleteBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		deleteBtn.setBounds(652, 315, 156, 59);
 		contentPane.add(deleteBtn);
 		
 		closeBtn = new JButton("Κλείσιμο");
+		closeBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.getTeachersMenuFrame().setEnabled(true);
+				Main.getTeachersUpdateDeleteFrame().setVisible(false);
+			}
+		});
 		closeBtn.setForeground(new Color(0, 0, 255));
 		closeBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		closeBtn.setBounds(652, 465, 156, 59);
@@ -296,7 +329,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 	
 	private void validateLastname(String inputLastname) {
 		if (inputLastname.equals("")) {
-			errorLastname.setText("Το όνομα είναι υποχρεωτικό");
+			errorLastname.setText("Το επώνυμο είναι υποχρεωτικό");
 		}
 		
 		if (!inputLastname.equals("")) {
