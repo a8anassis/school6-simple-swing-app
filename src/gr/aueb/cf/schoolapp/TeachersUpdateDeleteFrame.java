@@ -13,11 +13,21 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class TeachersUpdateDeleteFrame extends JFrame {
 
@@ -35,7 +45,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 	private JLabel lastnameLabel;
 	private JTextField lastnameText;
 	private JLabel errorFirstname;
-	private JLabel lblNewLabel;
+	private JLabel errorLastname;
 	private JPanel panel;
 	private JButton updateBtn;
 	private JButton deleteBtn;
@@ -43,6 +53,22 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 
 	
 	public TeachersUpdateDeleteFrame() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				buildTable();	// initial rendering
+				idText.setText("");
+				firstnameText.setText("");
+				lastnameText.setText("");
+			}
+			@Override
+			public void windowActivated(WindowEvent e) {
+				buildTable();	// refresh after update / delete
+				idText.setText("");
+				firstnameText.setText("");
+				lastnameText.setText("");
+			}
+		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 870, 632);
 		contentPane = new JPanel();
@@ -52,6 +78,14 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		teachersTable = new JTable();
+		teachersTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				idText.setText((String) model.getValueAt(teachersTable.getSelectedRow(), 0));
+				firstnameText.setText((String) model.getValueAt(teachersTable.getSelectedRow(), 1));
+				lastnameText.setText((String) model.getValueAt(teachersTable.getSelectedRow(), 2));
+			}
+		});
 		teachersTable.setModel(new DefaultTableModel(
 			new Object[][] {},
 			new String[] {"Κωδικός", "Όνομα", "Επώνυνο"}
@@ -89,6 +123,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		contentPane.add(idlabel);
 		
 		idText = new JTextField();
+		idText.setEditable(false);
 		idText.setBounds(556, 77, 96, 20);
 		contentPane.add(idText);
 		idText.setColumns(10);
@@ -100,6 +135,21 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		contentPane.add(firstnameLabel);
 		
 		firstnameText = new JTextField();
+		firstnameText.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				String inputFirstname;	
+				inputFirstname = firstnameText.getText().trim();	
+				
+				if (inputFirstname.equals("")) {
+					errorFirstname.setText("Το όνομα είναι υποχρεωτικό");
+				}
+				
+				if (!inputFirstname.equals("")) {
+					errorFirstname.setText("");
+				}
+			}
+		});
 		firstnameText.setBounds(556, 122, 177, 20);
 		contentPane.add(firstnameText);
 		firstnameText.setColumns(10);
@@ -111,17 +161,34 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		contentPane.add(lastnameLabel);
 		
 		lastnameText = new JTextField();
+		lastnameText.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				String inputLastname;
+				inputLastname = lastnameText.getText().trim();
+				
+				if (inputLastname.equals("")) {
+					errorLastname.setText("Το επώνυμο είναι υποχρεωτικό");
+				}
+				
+				if (!inputLastname.equals("")) {
+					errorLastname.setText("");
+				}
+			}
+		});
 		lastnameText.setBounds(556, 172, 177, 20);
 		contentPane.add(lastnameText);
 		lastnameText.setColumns(10);
 		
 		errorFirstname = new JLabel("");
+		errorFirstname.setForeground(new Color(255, 0, 0));
 		errorFirstname.setBounds(556, 147, 177, 20);
 		contentPane.add(errorFirstname);
 		
-		lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(556, 203, 177, 20);
-		contentPane.add(lblNewLabel);
+		errorLastname = new JLabel("");
+		errorLastname.setForeground(new Color(255, 0, 0));
+		errorLastname.setBounds(556, 203, 177, 20);
+		contentPane.add(errorLastname);
 		
 		panel = new JPanel();
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -130,6 +197,59 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		panel.setLayout(null);
 		
 		updateBtn = new JButton("Ενημέρωση");
+		updateBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// Data Binding
+				int inputId = Integer.parseInt(idText.getText().trim());
+				String inputFirstname = firstnameText.getText().trim();
+				String inputLastname = lastnameText.getText().trim();
+				
+				// Validation
+				
+				if (inputFirstname.isEmpty()) {
+					errorFirstname.setText("Το όνομα είναι υποχρεωτικό");
+				}
+				
+				if (!inputFirstname.isEmpty()) {
+					errorFirstname.setText("");
+				}
+				
+				if (inputLastname.isEmpty()) {
+					errorLastname.setText("Το επώνυμο είναι υποχρεωτικό");
+				}
+				
+				if (!inputLastname.isEmpty()) {
+					errorLastname.setText("");
+				}
+				
+				if (inputFirstname.isEmpty() || inputLastname.isEmpty()) {
+					return;
+				}
+				
+				String sql = "UPDATE teachers SET firstname = ?, lastname = ? WHERE id = ?";
+				
+				try {
+					PreparedStatement ps = MainMenuFrame.getConnection().prepareStatement(sql);
+					ps.setString(1, inputFirstname);
+					ps.setString(2, inputLastname);
+					ps.setInt(3, inputId);
+					
+					int answer = JOptionPane.showConfirmDialog(null, "Είστε σίγουρη/ος", "Ενημέρωση", JOptionPane.YES_NO_OPTION);
+					if (answer == JOptionPane.YES_OPTION) {
+						int rowsAffected = ps.executeUpdate();
+						JOptionPane.showMessageDialog(null, rowsAffected + " γρααμμή/ες ενημερώθηκαν", "Ενημέρωση", 
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						return;
+					}		
+				} catch (SQLException e1) {
+					
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		updateBtn.setForeground(new Color(0, 0, 255));
 		updateBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		updateBtn.setBounds(473, 315, 156, 59);

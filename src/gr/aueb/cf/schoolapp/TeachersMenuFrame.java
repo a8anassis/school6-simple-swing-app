@@ -18,25 +18,7 @@ public class TeachersMenuFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TeachersMenuFrame frame = new TeachersMenuFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
 	public TeachersMenuFrame() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersMenuFrame.class.getResource("/resources/eduv2.png")));
 		setTitle("Μενού Εκπαιδευτών ");
@@ -49,6 +31,12 @@ public class TeachersMenuFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton teachersViewBtn = new JButton("Προβολή Εκπαιδευτών");
+		teachersViewBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Main.getTeachersUpdateDeleteFrame().setVisible(true);
+				Main.getTeachersMenuFrame().setEnabled(false);
+			}
+		});
 		teachersViewBtn.setForeground(new Color(0, 0, 255));
 		teachersViewBtn.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		teachersViewBtn.setBounds(124, 57, 158, 52);
