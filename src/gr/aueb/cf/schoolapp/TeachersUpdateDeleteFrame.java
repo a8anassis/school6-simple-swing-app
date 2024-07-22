@@ -107,13 +107,18 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		contentPane.add(lastnameSearchLabel);
 		
 		lastnameSearchText = new JTextField();
-		lastnameSearchText.setBounds(128, 8, 177, 20);
+		lastnameSearchText.setBounds(114, 8, 177, 20);
 		contentPane.add(lastnameSearchText);
 		lastnameSearchText.setColumns(10);
 		
 		btnSearch = new JButton("Αναζήτηση");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buildTable();
+			}
+		});
 		btnSearch.setForeground(new Color(0, 0, 255));
-		btnSearch.setBounds(328, 7, 89, 23);
+		btnSearch.setBounds(301, 7, 124, 23);
 		contentPane.add(btnSearch);
 		
 		idlabel = new JLabel("Κωδικός");
@@ -140,14 +145,15 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 			public void focusLost(FocusEvent e) {
 				String inputFirstname;	
 				inputFirstname = firstnameText.getText().trim();	
+				validateFirstname(inputFirstname);
 				
-				if (inputFirstname.equals("")) {
-					errorFirstname.setText("Το όνομα είναι υποχρεωτικό");
-				}
-				
-				if (!inputFirstname.equals("")) {
-					errorFirstname.setText("");
-				}
+//				if (inputFirstname.equals("")) {
+//					errorFirstname.setText("Το όνομα είναι υποχρεωτικό");
+//				}
+//				
+//				if (!inputFirstname.equals("")) {
+//					errorFirstname.setText("");
+//				}
 			}
 		});
 		firstnameText.setBounds(556, 122, 177, 20);
@@ -166,14 +172,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 			public void focusLost(FocusEvent e) {
 				String inputLastname;
 				inputLastname = lastnameText.getText().trim();
-				
-				if (inputLastname.equals("")) {
-					errorLastname.setText("Το επώνυμο είναι υποχρεωτικό");
-				}
-				
-				if (!inputLastname.equals("")) {
-					errorLastname.setText("");
-				}
+				validateLastname(inputLastname);
 			}
 		});
 		lastnameText.setBounds(556, 172, 177, 20);
@@ -206,22 +205,8 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 				String inputLastname = lastnameText.getText().trim();
 				
 				// Validation
-				
-				if (inputFirstname.isEmpty()) {
-					errorFirstname.setText("Το όνομα είναι υποχρεωτικό");
-				}
-				
-				if (!inputFirstname.isEmpty()) {
-					errorFirstname.setText("");
-				}
-				
-				if (inputLastname.isEmpty()) {
-					errorLastname.setText("Το επώνυμο είναι υποχρεωτικό");
-				}
-				
-				if (!inputLastname.isEmpty()) {
-					errorLastname.setText("");
-				}
+				validateFirstname(inputFirstname);
+				validateLastname(inputLastname);
 				
 				if (inputFirstname.isEmpty() || inputLastname.isEmpty()) {
 					return;
@@ -235,7 +220,8 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 					ps.setString(2, inputLastname);
 					ps.setInt(3, inputId);
 					
-					int answer = JOptionPane.showConfirmDialog(null, "Είστε σίγουρη/ος", "Ενημέρωση", JOptionPane.YES_NO_OPTION);
+					int answer = JOptionPane.showConfirmDialog(null, "Είστε σίγουρη/ος", "Ενημέρωση", 
+							JOptionPane.YES_NO_OPTION);
 					if (answer == JOptionPane.YES_OPTION) {
 						int rowsAffected = ps.executeUpdate();
 						JOptionPane.showMessageDialog(null, rowsAffected + " γρααμμή/ες ενημερώθηκαν", "Ενημέρωση", 
@@ -295,6 +281,26 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 			}		
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void validateFirstname(String inputFirstname) {
+		if (inputFirstname.equals("")) {
+			errorFirstname.setText("Το όνομα είναι υποχρεωτικό");
+		}
+		
+		if (!inputFirstname.equals("")) {
+			errorFirstname.setText("");
+		}
+	}
+	
+	private void validateLastname(String inputLastname) {
+		if (inputLastname.equals("")) {
+			errorLastname.setText("Το όνομα είναι υποχρεωτικό");
+		}
+		
+		if (!inputLastname.equals("")) {
+			errorLastname.setText("");
 		}
 	}
 }
