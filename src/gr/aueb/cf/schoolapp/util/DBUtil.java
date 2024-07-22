@@ -38,5 +38,5 @@ public class DBUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
+	}	
 }

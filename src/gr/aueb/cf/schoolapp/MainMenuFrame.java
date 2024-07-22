@@ -27,23 +27,23 @@ public class MainMenuFrame extends JFrame {
 	public MainMenuFrame() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainMenuFrame.class.getResource("/resources/eduv2.png")));
 		
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowOpened(WindowEvent e) {
-				
-				String sql = "jdbc:mysql://localhost:3306/school6db?serverTimeZone=UTC";
-				String username = "userdb6";
-				String password = "12345";		// Password should not appear (not be visible) in code-base.
-				
-				try {
-					connection = DriverManager.getConnection(sql, username, password);
-					System.out.println("Connection Success");
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
-				
-			}
-		});
+//		addWindowListener(new WindowAdapter() {
+//			@Override
+//			public void windowOpened(WindowEvent e) {
+//				
+//				String sql = "jdbc:mysql://localhost:3306/school6db?serverTimeZone=UTC";
+//				String username = "userdb6";
+//				String password = "12345";		// Password should not appear (not be visible) in code-base.
+//				
+//				try {
+//					connection = DriverManager.getConnection(sql, username, password);
+//					System.out.println("Connection Success");
+//				} catch (SQLException e1) {
+//					e1.printStackTrace();
+//				}
+//				
+//			}
+//		});
 		
 		setBackground(new Color(255, 255, 255));
 		setTitle("Ποιότητα στην Εκπαίδευση");
@@ -107,11 +107,11 @@ public class MainMenuFrame extends JFrame {
 		manual.setBounds(24, 27, 102, 27);
 		footer.add(manual);
 	}
-
-	public static Connection getConnection() {
-		return connection;
-	}
-	
+//
+//	public static Connection getConnection() {
+//		return connection;
+//	}
+//	
 	
 	
 }

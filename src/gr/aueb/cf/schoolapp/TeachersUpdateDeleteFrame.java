@@ -1,6 +1,7 @@
 package gr.aueb.cf.schoolapp;
 
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+
+import gr.aueb.cf.schoolapp.util.DBUtil;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -203,6 +207,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				// Data Binding
+				// ToDo if (!idText.getText().trim().isEmpty()) do; else return; 
 				int inputId = Integer.parseInt(idText.getText().trim());
 				String inputFirstname = firstnameText.getText().trim();
 				String inputLastname = lastnameText.getText().trim();
@@ -216,9 +221,9 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 				}
 				
 				String sql = "UPDATE teachers SET firstname = ?, lastname = ? WHERE id = ?";
-				
-				try {
-					PreparedStatement ps = MainMenuFrame.getConnection().prepareStatement(sql);
+				try (Connection conn = DBUtil.getConnection();
+						PreparedStatement ps = conn.prepareStatement(sql)) {
+					
 					ps.setString(1, inputFirstname);
 					ps.setString(2, inputLastname);
 					ps.setInt(3, inputId);
@@ -233,8 +238,8 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 						return;
 					}		
 				} catch (SQLException e1) {
-					
-					e1.printStackTrace();
+					//e1.printStackTrace();
+					JOptionPane.showMessageDialog(null,  "Insertion error", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
@@ -247,12 +252,12 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		deleteBtn = new JButton("Διαγραφή");
 		deleteBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String sql = "DELETE FROM teachers WHERE id = ?";
 				
-				try {
-					int inputId = Integer.parseInt(idText.getText().trim());
+				String sql = "DELETE FROM teachers WHERE id = ?";
+				try (Connection conn = DBUtil.getConnection();
+						PreparedStatement ps = conn.prepareStatement(sql)) {
 					
-					PreparedStatement ps = MainMenuFrame.getConnection().prepareStatement(sql);
+					int inputId = Integer.parseInt(idText.getText().trim());
 					ps.setInt(1, inputId);
 					
 					int answer = JOptionPane.showConfirmDialog(null, "Είστε σίγουρη/ος", "Διαγραφή", 
@@ -265,7 +270,8 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 						return;
 					}							
 				} catch (SQLException ex) {
-					ex.printStackTrace();
+					//ex.printStackTrace();
+					JOptionPane.showMessageDialog(null,  "Delete error", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -291,10 +297,10 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		
 		Vector<String> vector;
 		
-		try {
+		String sql = "SELECT id, firstname, lastname FROM teachers WHERE lastname LIKE ?";
+		try (Connection conn = DBUtil.getConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)) {
 			
-			String sql = "SELECT id, firstname, lastname FROM teachers WHERE lastname LIKE ?";
-			PreparedStatement ps = MainMenuFrame.getConnection().prepareStatement(sql);
 			ps.setString(1, lastnameSearchText.getText().trim() + "%" );
 			
 			ResultSet rs = ps.executeQuery();
@@ -313,7 +319,8 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 				model.addRow(vector);
 			}		
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			JOptionPane.showMessageDialog(null,  "Select error", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
