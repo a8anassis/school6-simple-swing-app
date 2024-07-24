@@ -300,6 +300,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		String sql = "SELECT id, firstname, lastname FROM teachers WHERE lastname LIKE ?";
 		try (Connection conn = DBUtil.getConnection();
 				PreparedStatement ps = conn.prepareStatement(sql)) {
+			System.out.println("Build Table entry");
 			
 			ps.setString(1, lastnameSearchText.getText().trim() + "%" );
 			
