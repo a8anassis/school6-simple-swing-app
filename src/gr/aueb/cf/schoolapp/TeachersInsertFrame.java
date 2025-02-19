@@ -38,7 +38,7 @@ public class TeachersInsertFrame extends JFrame {
 
 
 	public TeachersInsertFrame() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersInsertFrame.class.getResource("/resources/eduv2.png")));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersInsertFrame.class.getResource("/resources/eduv2.png")));
 		setTitle("Εισαγωγή Εκπαιδευτών");
 		addWindowListener(new WindowAdapter() {
 			@Override

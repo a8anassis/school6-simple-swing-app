@@ -18,7 +18,7 @@ public class TeachersMenuFrame extends JFrame {
 
 
 	public TeachersMenuFrame() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersMenuFrame.class.getResource("/resources/eduv2.png")));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersMenuFrame.class.getResource("/resources/eduv2.png")));
 		setTitle("Μενού Εκπαιδευτών ");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 427, 358);

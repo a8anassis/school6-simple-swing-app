@@ -25,7 +25,7 @@ public class MainMenuFrame extends JFrame {
 	private static Connection connection;
 
 	public MainMenuFrame() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(MainMenuFrame.class.getResource("/resources/eduv2.png")));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage(MainMenuFrame.class.getResource("/resources/eduv2.png")));
 		
 //		addWindowListener(new WindowAdapter() {
 //			@Override
@@ -56,7 +56,8 @@ public class MainMenuFrame extends JFrame {
 		contentPane.setLayout(null);
 		
 		JSeparator headerSeparator = new JSeparator();
-		headerSeparator.setBounds(9, 71, 426, 1);
+		headerSeparator.setBackground(new Color(0, 255, 255));
+		headerSeparator.setBounds(-1, 57, 437, 3);
 		contentPane.add(headerSeparator);
 		
 		JPanel header = new JPanel();
@@ -68,7 +69,7 @@ public class MainMenuFrame extends JFrame {
 		JLabel codingFactoryLabel = new JLabel("Coding Factory");
 		codingFactoryLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		codingFactoryLabel.setForeground(new Color(255, 255, 255));
-		codingFactoryLabel.setBounds(10, 11, 131, 25);
+		codingFactoryLabel.setBounds(151, 11, 131, 25);
 		header.add(codingFactoryLabel);
 		
 		JButton teachersBtn = new JButton("");
@@ -88,6 +89,10 @@ public class MainMenuFrame extends JFrame {
 		contentPane.add(teachersLabel);
 		
 		JButton studentsBtn = new JButton("");
+		studentsBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		studentsBtn.setBounds(10, 171, 40, 40);
 		contentPane.add(studentsBtn);
 		
@@ -97,21 +102,13 @@ public class MainMenuFrame extends JFrame {
 		studentsLabel.setBounds(54, 171, 111, 40);
 		contentPane.add(studentsLabel);
 		footer.setBackground(new Color(217, 217, 217));
-		footer.setBounds(-1, 261, 438, 65);
+		footer.setBounds(-1, 271, 438, 65);
 		contentPane.add(footer);
 		footer.setLayout(null);
 		
-		JLabel manual = new JLabel("Εγχειρίδιο Χρήσης");
-		manual.setForeground(new Color(0, 0, 255));
-		manual.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		manual.setBounds(24, 27, 102, 27);
-		footer.add(manual);
+		JButton btnManual = new JButton("Εγχειρίδιο Χρήσης");
+		btnManual.setForeground(new Color(13, 0, 255));
+		btnManual.setBounds(10, 11, 139, 32);
+		footer.add(btnManual);
 	}
-//
-//	public static Connection getConnection() {
-//		return connection;
-//	}
-//	
-	
-	
 }

@@ -26,6 +26,7 @@ import java.awt.Color;
 import javax.swing.border.BevelBorder;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
@@ -58,7 +59,10 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 
 	
 	public TeachersUpdateDeleteFrame() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersUpdateDeleteFrame.class.getResource("/resources/eduv2.png")));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage(TeachersUpdateDeleteFrame.class.getResource("/resources/eduv2.png")));
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		URL url = classLoader.getResource("eduv2.png");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(url));
 		setTitle("Ενημέρωση / Διαγραφή Εκπαιδευτή");
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -95,7 +99,7 @@ public class TeachersUpdateDeleteFrame extends JFrame {
 		});
 		teachersTable.setModel(new DefaultTableModel(
 			new Object[][] {},
-			new String[] {"Κωδικός", "Όνομα", "Επώνυνο"}
+			new String[] {"Κωδικός", "Όνομα", "Επώνυμο"}
 		));
 		
 		model = (DefaultTableModel) teachersTable.getModel();
